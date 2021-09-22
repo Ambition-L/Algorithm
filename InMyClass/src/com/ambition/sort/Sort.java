@@ -42,12 +42,15 @@ import java.util.ArrayList;
 
 public class Sort {
     public static void main(String[] args) {
-//        int[] sort = sort3(new int[]{2, 1, 5, 6, 27, 35, 22});
-//        for (int i : sort) {
-//            System.out.print(i + ",");
-//        }
 
-        System.out.println(sorts(new int[]{2, 1, 5, 35, 27,6 , 100}));
+        int[] sort = sort4(new int[]{35, 27,6,2, 1, 5,  100,11},2);
+        int[] sort1 = sort4(sort,1);
+        int[] sort2 = sort4(sort1,1);
+        for (int i : sort) {
+            System.out.print(i + ",");
+        }
+
+        //System.out.println(sorts(new int[]{2, 1, 5, 35, 27,6 , 100}));
     }
 
     // 01 插入排序
@@ -144,6 +147,19 @@ public class Sort {
                     nums[j] = nums[j + 1];
                     nums[j + 1] = temp;
                 }
+            }
+        }
+        return nums;
+    }
+
+    // 04 希尔排序
+    public static int[] sort4 (int[] nums, int d) {
+        int dlen = nums.length / (d + 1);
+        for (int i = 0; i < dlen; i++) {
+            if (nums[i] > nums[i + d + 1]) {
+                int temp = nums[i];
+                nums[i] = nums[i + d + 1];
+                nums[i + d + 1] = temp;
             }
         }
         return nums;
