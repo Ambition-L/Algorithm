@@ -1,6 +1,7 @@
 package com.ambition.sort;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,15 +35,15 @@ public class Sort3 {
      int[] list = new int[]{2, 1, 5, 35, 27, 6, 100, 11};
 
     public static void main(String[] args) {
-        Sort3 sort3 = new Sort3();
-        sort3.sort602(0, sort3.list.length - 1);
+//        Sort3 sort3 = new Sort3();
+//        sort3.sort602(0, sort3.list.length - 1);
+//
+//        for (int arg : sort3.list) {
+//            System.out.println(arg + ",");
+//        }
 
-        for (int arg : sort3.list) {
-            System.out.println(arg + ",");
-        }
-
-//        List<Integer> ints = sort601(Arrays.asList(2, 1, 5, 35, 27, 6,2,1, 100, 11));
-//        System.out.println(ints);
+        List<Integer> ints = sort601(Arrays.asList(2, 1, 5, 35, 27, 6,2,1, 100, 11));
+        System.out.println(ints);
     }
 
     /**
@@ -82,6 +83,7 @@ public class Sort3 {
         // 将主元素右边数组 起始和结束 角标传入方法
         sort602(l + 1, right);
     }
+
 
     public static List<Integer> sort601(List<Integer> nums) {
         ArrayList<Integer> aa = new ArrayList<>();
