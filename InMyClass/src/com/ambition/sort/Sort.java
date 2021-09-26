@@ -7,7 +7,7 @@ package com.ambition.sort;
  *   3、交换位置
  *   涉及到两个比较区域 有序区 无序区
  *
- *   01 -1 改进版 （折中比较插入--无序区数据每次挑选有序区中间位置数据进行比较）
+ *   01 -1 插入排序优化版本 （折中比较插入--无序区数据每次挑选有序区中间位置数据进行比较）
  *      01 初始化有序区数组 顺便将无序区数组第一个数据放入有序区数组 （减少了一次比较次数 并且不用判空）
  *      02 确定有序区数组左右边界和中间值角标
  *      03 当左边界小于或者等于右边界时 判断当前值与中间值的关系
@@ -41,6 +41,8 @@ package com.ambition.sort;
 import java.util.ArrayList;
 
 public class Sort {
+    static ArrayList<Integer[]> list = new ArrayList<>();
+
     public static void main(String[] args) {
 
         int[] sort = sort4(new int[]{35, 27,6,2, 1, 5,  100,11},2);
