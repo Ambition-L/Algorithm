@@ -38,8 +38,9 @@ public class Sort4 {
 
         // 当当前的数据还有子节点时
         while (son <= end) {
-            //
+            // 把子节点中 较小的节点放在父节点的右边
             if (son + 1 <= end && list[son + 1] > list[son]) {
+                // 跳过左子节点
                 son ++;
             }
             // 如果父节点小于子节点
@@ -47,7 +48,7 @@ public class Sort4 {
                 int temp = list[father];
                 list[father] = list[son];
                 list[son] = temp;
-                // 交换位置
+                // 重新定义父节点
                 father = son;
                 // 重新定义子节点
                 son = father * 2;
@@ -67,6 +68,7 @@ public class Sort4 {
 
         list = nums;
 
+        // 从最底层的非叶子节点开始 初始化顶堆
         for (int i = (list.length- 1 ) / 2; i > 0 ; i--) {
             sort7(i, list.length - 1);
         }
@@ -76,6 +78,7 @@ public class Sort4 {
      * 堆排序函数
      */
     public static void heapSort () {
+        // 将初始化好的堆 从最后一个元素开始 依次放在数组的最后 然后再继续初始化顶堆 以此往返 直到剩下最顶堆的数 排序完毕
         for (int i = list.length - 1; i > 0 ; i--) {
             int temp = list[1];
             list[1] = list[i];
