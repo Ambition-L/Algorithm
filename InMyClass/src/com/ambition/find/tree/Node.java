@@ -14,7 +14,7 @@ public class Node {
     private Node right;
 
     public static void main(String[] args) {
-        int[] nums = new int[]{2,14,5,19,3,8,17,15};
+        int[] nums = new int[]{2,14,5,19,3,8,6,17,15};
         Node root = new Node(9);
         // 插入
         for (int i = 0; i < nums.length; i++) {
@@ -63,7 +63,7 @@ public class Node {
 //        });
 
         // 删除
-        root.delete(root, 17);
+        root.delete(root, 5);
 
         root.printf(root);
         System.out.println(root.list);
@@ -258,39 +258,45 @@ public class Node {
             return root;
         }
 
+        // 比当前节点小 进入左子树
         if (data < root.val) {
             root.left = delete(root.left, data);
             return root;
-        }else if (data > root.val) {
+        }else if /* 比当前节点大 进入右子树 */(data > root.val) {
             root.right = delete(root.right, data);
             return root;
-        }else {
+        }else { // 找到要删除的数
             // 如果当前节点不存在左子树
             if (root.left == null) {
                 Node rightNode = root.right;
                 root.right = null;
                 return rightNode;
-            }else if (root.right == null) { // 如果当前节点不存在右子树
+            }else if /* 如果当前节点不存在右子树 */(root.right == null) {
                 Node leftNode = root.left;
                 root.left = null;
                 return leftNode;
-            }else {
+            }else /* 如果当前节点存在左右子树 */{
                 // 进入右子树找到 后继节点
                 Node rightNode = root.right;
                 // 如果当前右子树没有左子树
                 if (rightNode.left == null) {
+                    // 将当前节点的右节点 设置为当前节点的值
                     root.val = rightNode.val;
+                    // 将当前节点的的右节点的右子树 设置为当前节点的右子树
                     root.right = rightNode.right;
                 }else {
                     // 如果当前右子树存在左子树 则进入该左子树
                     Node next = rightNode.left;
                     while (next.left != null) {
-                        rightNode = next;
+                        // 更新后继节点
                         next = next.left;
                     }
+                    // 将当前节点值 修改为后继节点值
                     root.val = next.val;
-                    root.right = rightNode;
+                    // 将后继节点删除 并返回当前节点的右子树
+                    root.right = del(root.right);
                 }
+                // 返回当前节点
                 return root;
             }
         }
@@ -299,20 +305,12 @@ public class Node {
     /**
      * 删除节点
      * @param root
-     * @param node1
-     * @param node2
      */
-    public void del(Node root,Node node1, Node node2) {
-        if (root == null)
-            return;
-
-        if (root.val == node1.val) {
-            root.val = node2.val;
-            root.right = node2.right;
-            return;
+    public Node del(Node root) {
+        if (root.left == null) {
+            return root.right;
         }
-
-        del(root.left,node1,node2);
-        del(root.right,node1,node2);
+        root.left = del(root.left);
+        return root;
     }
 }
