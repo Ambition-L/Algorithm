@@ -46,11 +46,11 @@ class Factor {
 
 public class Work3 {
     public static void main(String[] args) {
-        GuoYuan xrk = EasyFactor.getInstance("xrk");
+        ZhiWu xrk = Factor.getInstance("xrk");
         xrk.show();
-        GuoYuan jg = EasyFactor.getInstance("jg");
+        ZhiWu jg = Factor.getInstance("jg");
         jg.show();
-        GuoYuan sheshou = EasyFactor.getInstance("sheshou");
+        ZhiWu sheshou = Factor.getInstance("sheshou");
         sheshou.show();
     }
 }
