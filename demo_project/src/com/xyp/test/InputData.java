@@ -31,7 +31,9 @@ public class InputData {
          *   这里的字段过滤可以根据 反射拿到对象的字段名放入 集合数组中 通过方法传入 进行比较过滤 更具有通用性
          */
         List<String> filterList =
-                datas.stream().filter(t -> Objects.nonNull(t) && t.charAt(0) != '+' && !t.contains("uuid")).collect(Collectors.toList());
+                datas.stream()
+                        .filter(t -> Objects.nonNull(t) && t.charAt(0) != '+' && !t.contains("uuid"))
+                        .collect(Collectors.toList());
 
         if (filterList.size() == 0) {
             return null;
@@ -40,7 +42,6 @@ public class InputData {
         // 返回对象
         return filterList.stream().map(t -> {
             String[] split = spilts(t);
-
 
             // 封装对象
             return InputDatas.builder()

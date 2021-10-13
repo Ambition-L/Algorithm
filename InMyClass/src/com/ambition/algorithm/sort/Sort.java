@@ -1,4 +1,4 @@
-package com.ambition.sort;
+package com.ambition.algorithm.sort;
 
 /**
  * 01 插入排序 (无序区数据 依次和有序去区数据比较 如果符合需求 比较一次交换依次)

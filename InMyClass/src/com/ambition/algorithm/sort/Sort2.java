@@ -1,4 +1,4 @@
-package com.ambition.sort;
+package com.ambition.algorithm.sort;
 
 import java.util.ArrayList;
 import java.util.List;

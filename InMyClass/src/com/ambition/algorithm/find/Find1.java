@@ -1,4 +1,4 @@
-package com.ambition.find;
+package com.ambition.algorithm.find;
 
 /**
  * 1、暴力查找

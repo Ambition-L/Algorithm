@@ -1,4 +1,4 @@
-package com.ambition.find.tree;
+package com.ambition.algorithm.find.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
