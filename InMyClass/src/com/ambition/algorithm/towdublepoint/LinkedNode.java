@@ -193,6 +193,7 @@ public class LinkedNode {
      * 获取链表倒数第几个数据
      * @param node 头节点
      * @param k 倒数第多少个数
+     *          index  角标
      * @return
      */
     public LinkedNode getReciprocalNum(LinkedNode node,int k, String index) {
