@@ -134,6 +134,98 @@ public class LinkedNode {
         }
     }
 
+    /**
+     * 判断是否为环形链表
+     * @param node
+     * @return
+     */
+    public boolean isCycle(LinkedNode node) {
+        if (node.next == null)
+            return false;
+        LinkedNode p = node,q = node;
+        while (q != null && q.next != null) {
+            p = p.next;
+            q = q.next.next;
+            if (p == q) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 求链表长度
+     *  环形链表求长度：
+     *      一个指针不动 一个一直走 两指针相等 代表走了一圈
+     * @param node
+     * @return 链表长度
+     */
+    public int linkedLength (LinkedNode node) {
+        if (node.next == null) {
+            return 0;
+        }
+        int count = 1;
+        LinkedNode p = node,q = node;
+
+        // 不是环形链表
+        if (!isCycle(node)) {
+            // 定义一个指针 count记录长度
+            p = p.next;
+            while (p != null) {
+                p = p.next;
+                count++;
+            }
+        }else /* 是环形链表 定义定义两个指针求长度  */{
+            while (q.next != null) {
+                p = p.next;
+                q = q.next.next;
+                if (p != q) {
+                    count++;
+                }else
+                    break;
+            }
+
+        }
+        return count;
+    }
+
+    /**
+     * 获取链表倒数第几个数据
+     * @param node 头节点
+     * @param k 倒数第多少个数
+     * @return
+     */
+    public LinkedNode getReciprocalNum(LinkedNode node,int k, String index) {
+        if (node.next == null)
+            return null;
+
+        int count = 1;
+
+        // 定义快慢指针
+        LinkedNode p = node,q = node;
+
+        // 快指针走k步
+        while (k > 0 && p.next != null) {
+            p = p.next;
+            k--;
+        }
+
+        // 如果没走完k步 说明无此数据
+        if (k != 0) {
+            return null;
+        }
+
+        // 快慢指针一起走直到快指针走到末尾 那么慢指针就是要找的值
+        while (p != null) {
+            count++;
+            p = p.next;
+            q = q.next;
+        }
+
+        index = "" + count;
+
+        return q;
+    }
 }
 class User {
     public static void main(String[] args) {
@@ -149,7 +241,11 @@ class User {
         //System.out.println(linkedNode1.data);
         //System.out.println(linkedNode.search2(linkedNode, 6).data);
         //System.out.println(linkedNode.insert(linkedNode, 1, 6, 1));
-        System.out.println(linkedNode.deleteNode(linkedNode, 6, 1));
+        //System.out.println(linkedNode.deleteNode(linkedNode, 6, 1));
+//        String a = "";
+//        System.out.println(linkedNode.getReciprocalNum(linkedNode, 2, a).data);
+//        System.out.println(a);
+        System.out.println(linkedNode.isCycle(linkedNode));
         System.out.println();
     }
 }
