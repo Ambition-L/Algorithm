@@ -1,9 +1,6 @@
 package com.ambition.algorithm.find.tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 二叉搜索树的 增删改查
@@ -13,13 +10,24 @@ public class Node {
     private Node left;
     private Node right;
 
+    static List<Integer> list = new ArrayList<>();
+
     public static void main(String[] args) {
-        int[] nums = new int[]{2,14,5,19,3,8,6,17,15};
-        Node root = new Node(9);
+        Map<Character,Integer> map = new HashMap<>();
+
+
+
+
+        int[] nums = new int[]{2,5,3};
+        Node root = new Node(4);
         // 插入
         for (int i = 0; i < nums.length; i++) {
             root.insert(root, nums[i]);
         }
+
+        root.printf(root);
+        System.out.println(list.get(0));
+        System.out.println(list.stream().max(Comparator.naturalOrder()).get());
 
         // 遍历
 //        root.printf(root);
@@ -63,9 +71,9 @@ public class Node {
 //        });
 
         // 删除
-        root.delete(root, 5);
+        //root.delete(root, 5);
 
-        root.printf(root);
+
         System.out.println(root.list);
     }
 
@@ -80,12 +88,12 @@ public class Node {
      * @param root 根节点
      * @return
      */
-    List<Integer> list = new ArrayList<>();
+
     public void printf(Node root) {
         if (root == null)
             return;
-        list.add(root.val);
         printf(root.left);
+        list.add(root.val);
         printf(root.right);
     }
 
