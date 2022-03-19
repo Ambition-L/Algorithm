@@ -20,16 +20,7 @@ public class LinkedNode {
         this.data = data;
     }
 
-    /**
-     * 生成链表
-     */
-    public LinkedNode init(LinkedNode head, int nums) {
-        if (head.next != null)
-            return init(head.next,nums);
-        else
-        head.next = new LinkedNode(nums);
-        return head;
-    }
+
 
     /**
      * 遍历链表
@@ -227,8 +218,39 @@ public class LinkedNode {
 
         return q;
     }
+
+    public LinkedNode getNode (LinkedNode head, LinkedNode q) {
+        if (head == null)
+            return null;
+
+        if (head == q) {
+            if (head.next == null){
+                head = null;
+            }
+            if (head != null){
+                head.data = q.next.data;
+                head.next = q.next.next;
+            }
+            return null;
+        }else {
+            getNode(head.next, q);
+        }
+        return null;
+    }
+
+    /**
+     * 生成链表
+     */
+    public LinkedNode init(LinkedNode head, int nums) {
+        if (head.next != null)
+            return init(head.next,nums);
+        else
+            head.next = new LinkedNode(nums);
+        return head;
+    }
 }
 class User {
+
     public static void main(String[] args) {
         int[] ints = {1, 2, 3, 4, 5};
         LinkedNode linkedNode = new LinkedNode();
@@ -236,17 +258,41 @@ class User {
             linkedNode.init(linkedNode, ints[i]);
         }
 
+        LinkedNode p = linkedNode,q = linkedNode;
+
+        int k = 1;
+        // 快指针走k步
+        while (k > 0 && p != null) {
+            p = p.next;
+            k--;
+        }
+        // 如果没走完k步 说明无此数据
+        if (k != 0) {
+            System.out.println(linkedNode);
+        }
+
+        int count = 0;
+        // 快慢指针一起走直到快指针走到末尾 那么慢指针就是要找的值
+        while (p != null) {
+            count++;
+            p = p.next;
+            q = q.next;
+        }
+
+
+
         //System.out.println(linkedNode.printfs(linkedNode, new ArrayList<>()));
         //System.out.println(linkedNode);
         //LinkedNode linkedNode1 = linkedNode.searchNode(linkedNode, 6);
         //System.out.println(linkedNode1.data);
         //System.out.println(linkedNode.search2(linkedNode, 6).data);
-        //System.out.println(linkedNode.insert(linkedNode, 1, 6, 1));
+        System.out.println(linkedNode.insert(linkedNode, count, q.data, 1));
         //System.out.println(linkedNode.deleteNode(linkedNode, 6, 1));
 //        String a = "";
 //        System.out.println(linkedNode.getReciprocalNum(linkedNode, 2, a).data);
 //        System.out.println(a);
-        System.out.println(linkedNode.isCycle(linkedNode));
+//        System.out.println(linkedNode.isCycle(linkedNode));
+        System.out.println(linkedNode.getNode(linkedNode,q));
         System.out.println();
     }
 }

@@ -78,6 +78,7 @@ public class AuthAndEncryption {
     // 接收方 userB
     public void userB(String message,String message2,User userA,User userB) {
         System.out.println("--------接收方用户B接受到用户A的消息--------");
+        System.out.println();
         // 1、用自己的私钥先解密 得到用对方私钥加密的明文和摘要
         String decrypt = controller.decrypt(userNameB, userNameA, message2);
         System.out.println("私钥解密成功,解密之后的明文为：\n" + decrypt);
@@ -104,6 +105,7 @@ public class AuthAndEncryption {
         }else System.err.println("用户认证失败");
 
         // 4、结束
+        System.out.println();
         System.out.println("--------接收方用户B解密完毕--------");
     }
 

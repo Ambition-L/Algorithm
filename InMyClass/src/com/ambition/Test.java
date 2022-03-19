@@ -3,59 +3,92 @@ package com.ambition;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Test {
-    static class Test3 {
-        public static void main(String[] args) {
-            System.out.println(new Test3().distributeCandies(new int[]{1,1,2,2,3,4}));
-        }
-        public int distributeCandies(int[] candyType) {
-            HashSet<Integer> set = new HashSet<>();
-            for (int i : candyType) {
-                set.add(i);
-            }
 
-            if (set.size() == candyType.length / 2)
-                return set.size();
 
-            return candyType.length / 2;
-        }
+    static class Main {
+        public static void main(String[] args) {}
+
+
     }
 
-    static class Test2 {
-        // 回溯算法解决 排列组合问题 给出一组没有重复的数据 要求返回没有重复排列的集合
-        static List<LinkedList<Integer>> set = new LinkedList<>();
-
+    static  class Test3 {
+        //N皇后问题
         public static void main(String[] args) {
-            new Test2().plzh(new int[]{1,2,3,4},new LinkedList<>());
-            System.out.println(set);
+            int[][] nums = new int[][]{
+                    {0,0,0,0},
+                    {0,0,0,0},
+                    {0,0,0,0},
+                    {0,0,0,0}
+            };
+
+            //System.out.println(new Test3().isTrue(nums,1,2));
+           // new Test3().dfs(nums,0,0);
+            boolean[][] ss = new boolean[2][2];
+            boolean a = true;
+            HashSet<String> set = new HashSet<>();
+            String s = "1s3 PSt";
+            String s1 = s.toLowerCase();
+            System.out.println(s1);
+            //System.out.println(a);
         }
 
-        public void plzh(int[] nums,LinkedList<Integer> list) {
-            // 1、结束条件
-            if (list.size() == nums.length){
-                set.add(new LinkedList(list));
+
+        // 回溯
+        public void dfs(int[][] nums,int x,int y) {
+            if (!isTrue(nums, x,y)) {
                 return;
             }
 
-            // 2、选择路径
-            for (int i = 0; i < nums.length; i++) {
-                // 3、选择之前要做的事
-                // 如果当前排列包含了该数据
-                if (list.contains(nums[i])) continue;
+            for (int i = x; i < nums.length; i++) {
+                for (int j = y; j < nums.length; j++) {
+                    nums[i][j] = 1;
+                    dfs(nums,x,j);
+                }
+                dfs(nums,i+1,0);
+            }
+        }
 
-                // 4、做选择
-                list.add(nums[i]);
 
-                // 5、进入下一层决策树
-                plzh(nums,list);
-
-                // 6、做完选择之后做的事情
-                // 撤销选择
-                list.removeLast();
+        // 校验n皇后 的指定位置是否可以放置棋子
+        public boolean isTrue(int[][] nums,int x,int y) {
+            // 行列
+            for (int i = 0,j = 0; i < nums.length; i++,j++){
+                if (nums[x][i] == 1 || nums[j][y] == 1) return false;
             }
 
+            // 对角
+            int x1 = x - 1,y1 = y - 1;
+            while (x1 >= 0 && x1 < nums[0].length && y1 >= 0 && y1 < nums[0].length){
+                if (nums[x1][y1] == 1) return false;
+                x1--;y1--;
+            }
+
+            x1 = x - 1;
+            y1 = y + 1;
+            while (x1 >= 0 && x1 < nums[0].length && y1 >= 0 && y1 < nums[0].length){
+                if (nums[x1][y1] == 1) return false;
+                x1--;y1++;
+            }
+
+            x1 = x + 1;
+            y1 = y - 1;
+            while (x1 >= 0 && x1 < nums[0].length && y1 >= 0 && y1 < nums[0].length){
+                if (nums[x1][y1] == 1) return false;
+                x1++;y1--;
+            }
+
+            x1 = x + 1;
+            y1 = y + 1;
+            while (x1 >= 0 && x1 < nums[0].length && y1 >= 0 && y1 < nums[0].length){
+                if (nums[x1][y1] == 1) return false;
+                x1++;y1++;
+            }
+            return true;
         }
     }
+
 
     public List<String> removeInvalidParentheses(String s) {
         // 先统计需要删除的左括号数和右括号数
