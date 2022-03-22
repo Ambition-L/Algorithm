@@ -8,11 +8,236 @@ import java.util.*;
 public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
     public static void main(String[] args) {
-      new LanQiaoCup().QA8();
+      new LanQiaoCup().QA14();
     }
 
     /**
-     * m次方根
+     *  贪心的自助餐
+     */
+    public void QA14() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        double C = scan.nextInt();
+        Double[][] nums = new Double[n][3];
+        double sumC = 0,value = 0;
+        for (int i = 0; i < n; i++) {
+            double v = scan.nextDouble();
+            double c = scan.nextDouble();
+            nums[i][0] = v;
+            nums[i][1] = c;
+            nums[i][2] = v/c;
+            sumC +=c;
+            value += v;
+        }
+        if (sumC <= C) {
+            System.out.printf("%.3f%n",value);
+            return;
+        }
+        // 按价值排序
+        Arrays.sort(nums,(a,b) -> b[2].compareTo(a[2]));
+
+        value = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if ((C - nums[i][1]) >= 0 ) {
+                C -= nums[i][1];
+                value+= nums[i][0];
+            }else {
+               while (C>0) {
+                   value+=nums[i][2];
+                   C--;
+               }
+               break;
+            }
+        }
+        System.out.printf("%.3f%n",value);
+        scan.close();
+    }
+
+    /**
+     * <小b的宿舍></>
+     *  "贪心" --只要计算出最大区间走廊使用量 / 2 即可让所有同学都搬完行李。
+     */
+    public void QA13 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        for (int i = 0; i < n; i++) {
+            int p = scan.nextInt();
+            Integer[] counts = new Integer[101];
+            Arrays.fill(counts,0);
+            for (int j = 0; j < p; j++) {
+                int from = scan.nextInt();
+                int to = scan.nextInt();
+                if (from % 2 == 0) from /= 2;
+                else from /=2 + 1;
+                if (to % 2 == 0) to/=2;
+                else to/=2+1;
+                if (from > to) {
+                    int temp = to;
+                    to = from;
+                    from = temp;
+                }
+                for (int k = from; k <= to; k++) {
+                    counts[k]++;
+                }
+            }
+            Arrays.sort(counts,(a,b) -> b-a);
+            System.out.println(counts[0]%2 == 0? counts[0] / 2 * 10:(counts[0] / 2 + 1) * 10);
+        }
+        scan.close();
+    }
+
+    /**
+     * <<找零问题>>
+     */
+    public void QA12 () {
+        Scanner scan = new Scanner(System.in);
+        int totalN = scan.nextInt();
+        int h = 0;
+        if (totalN >= 100) {
+            h = totalN / 100;
+            totalN %= 100;
+        }
+        int w = 0;
+        if (totalN >= 50) {
+            w = totalN / 50;
+            totalN %= 50;
+        }
+        int e = 0;
+        if (totalN >= 20) {
+            e = totalN / 20;
+            totalN %= 20;
+        }
+        int ww = 0;
+        if (totalN >= 5) {
+            ww = totalN / 5;
+            totalN %= 5;
+        }
+        System.out.println("100:"+h);
+        System.out.println("50:"+w);
+        System.out.println("20:"+e);
+        System.out.println("5:"+ww);
+        System.out.println("1:"+totalN);
+        scan.close();
+    }
+
+    /**
+     * <<排座椅>> "贪心" "双hash" "排序"
+     */
+    public void QA11 () {
+        Scanner scan = new Scanner(System.in);
+        int rows = scan.nextInt();
+        int cols = scan.nextInt();
+        int countR = scan.nextInt();
+        int countC = scan.nextInt();
+        int d = scan.nextInt();
+        Map<Integer,Integer> rmap = new HashMap<>();
+        Map<Integer,Integer> cmap = new HashMap<>();
+        for (int i = 0; i < d; i++) {
+            int d1r = scan.nextInt();
+            int d1c = scan.nextInt();
+            int d2r = scan.nextInt();
+            int d2c = scan.nextInt();
+
+            if (d1r == d2r) {
+                int min = Math.min(d1c, d2c);
+                cmap.put(min,cmap.getOrDefault(min,0)+1);
+            }else
+            if (d1c == d2c) {
+                int min = Math.min(d1r, d2r);
+                rmap.put(min,rmap.getOrDefault(min,0)+1);
+            }
+        }
+        List<Map.Entry<Integer, Integer>> rList = new ArrayList<>(rmap.entrySet());
+        Collections.sort(rList, (o1,o2) -> o2.getValue() - o1.getValue());
+        List<Integer> ansRList = new ArrayList<>();
+        if (rmap.size() < countR) {
+            for (Map.Entry<Integer, Integer> curr : rList) {
+                ansRList.add(curr.getKey());
+            }
+        }else {
+            for (Map.Entry<Integer, Integer> curr : rList) {
+                if (countR == 0)break;
+                ansRList.add(curr.getKey());
+                countR--;
+            }
+        }
+        List<Map.Entry<Integer, Integer>> cList = new ArrayList<>(cmap.entrySet());
+        Collections.sort(cList, (o1,o2) -> o2.getValue() - o1.getValue());
+        List<Integer> ansCList = new ArrayList<>();
+        if (cmap.size() < countC) {
+            for (Map.Entry<Integer, Integer> curr : cList) {
+                ansCList.add(curr.getKey());
+            }
+        }else {
+            for (Map.Entry<Integer, Integer> curr : cList) {
+                if (countC == 0)break;
+                ansCList.add(curr.getKey());
+                countC--;
+            }
+        }
+
+        Collections.sort(ansCList);
+        Collections.sort(ansRList);
+        for (int i = 0; i < ansRList.size(); i++) {
+            if (i != ansRList.size() - 1) {
+                System.out.print(ansRList.get(i) + " ");
+            }else System.out.println(ansRList.get(i));
+        }
+        for (int i = 0; i < ansCList.size(); i++) {
+            if (i != ansCList.size() - 1) {
+                System.out.print(ansCList.get(i) + " ");
+            }else System.out.println(ansCList.get(i));
+        }
+        scan.close();
+    }
+
+    /**
+     *  《谈判》 "合并最小二叉树" --》优先队列
+     */
+    public void QA10 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        PriorityQueue<Long> queue = new PriorityQueue<>(Long::compareTo);
+        for (int i = 0; i < n; i++) {
+            queue.offer(scan.nextLong());
+        }
+
+        long sum = 0;
+        while (queue.size() > 1) {
+            Long num1 = queue.poll();
+            Long num2 = queue.poll();
+            sum += (num1 + num2);
+            queue.offer(num1 + num2);
+        }
+        System.out.println(sum);
+        scan.close();
+    }
+
+    /**
+     *  《最大化股票交易利润》 单调栈
+     */
+    public void QA9 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        Deque<Integer> stack = new ArrayDeque<>();
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            int curr = scan.nextInt();
+            int m1 = Integer.MIN_VALUE;
+            while (!stack.isEmpty() && stack.getLast() > curr){
+                Integer pop = stack.poll();
+                m1 = Math.max(m1, curr - pop);
+            }
+
+            max = stack.isEmpty()? Math.max(max,m1):Math.max(max,curr-stack.getFirst());
+            stack.offer(curr);
+        }
+        System.out.println(max);
+        scan.close();
+    }
+
+    /**
+     * <<m次方根>> 二分
      */
     public void QA8 () {
         Scanner scan = new Scanner(System.in);

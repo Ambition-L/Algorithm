@@ -4,9 +4,62 @@ import java.util.*;
 
 public class LC {
     public static void main(String[] args) {
-        new LC().permutation("qwe");
+        System.out.println(new LC().networkBecomesIdle(new int[][]{
+                {3,8},{4,13},{0,7},{0,4},{1,8},{14,1},{7,2},{13,10},{9,11},{12,14},{0,6},{2,12},{11,5},{6,9},{10,3}
+        }, new int[]{
+            0,3,2,1,5,1,5,5,3,1,2,2,2,2,1
+        }));
 
     }
+
+    public int networkBecomesIdle(int[][] edges, int[] patience) {
+        // 构造图
+        List<int[]>[] grid = new LinkedList[patience.length];
+        for (int i = 0; i < grid.length; i++) grid[i] = new LinkedList<>();
+        for (int[] curr : edges) {
+            int from = curr[0];
+            int to = curr[1];
+            grid[from].add(new int[]{to,1});
+            grid[to].add(new int[]{from,1});
+        }
+
+        // 初始化路径列表
+        int[] paths = new int[patience.length];
+        Arrays.fill(paths,Integer.MAX_VALUE);
+        paths[0] = 0;
+
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{0,0});
+        while (!queue.isEmpty()) {
+            int[] point = queue.poll();
+            int from = point[0];
+            int len = point[1];
+            // 存储的已经是最短路径
+            if (len > paths[from] ) continue;
+            for (int[] curr : grid[from]) {
+                int nlen = curr[1] + len;
+                if (nlen < paths[curr[0]]) {
+                    paths[curr[0]] = nlen;
+                    queue.offer(new int[]{curr[0],nlen});
+                }
+            }
+        }
+
+        // 求最大网络传输花费时间
+        int max = 0;
+        for (int i = 1; i < paths.length; i++) {
+            int path = paths[i] * 2;
+            int c = patience[i];
+            int time = path;
+            if (c < path) {
+                time += path % c==0? path-c:path - path%c;
+            }
+            max = Math.max(time,max);
+        }
+
+        return max + 1;
+    }
+
     int n;
     char[] chars;
     Set<String> set = new HashSet<>();
