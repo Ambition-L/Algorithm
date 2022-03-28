@@ -8,7 +8,92 @@ import java.util.*;
 public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
     public static void main(String[] args) {
-      new LanQiaoCup().QA14();
+        new LanQiaoCup().QA20_2();
+    }
+
+    public void QA20_2(){
+        int count = 0;
+        for (int i = 1; i < 2021; i++) {
+            String s  = ""+i;
+            if (s.contains("2")) {
+                count++;
+            }
+        }
+        System.out.println(count);
+    }
+    public void QA20_1(){
+        int count = 0;
+        a:for (int i = 4; i <= 2020; i++) {
+            for (int j = 2; j < i; j++) {
+                if (i % j == 0) {
+                    count++;
+                    continue a;
+                }
+            }
+        }
+        System.out.println(count);
+    }
+
+
+    /**
+     * <数字位数></>
+     */
+    public void QA21_4(){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= 2020 ; i++) {
+            sb.append(i);
+        }
+        System.out.println(sb.length());
+    }
+
+    /**
+     * 《相乘》
+     */
+    public void QA21_3(){
+        long t = 2021 * 1000000007L;
+        long l = 999999999;
+        long r = 1000000007L;
+        for (long j = 10000; j <= 1000000007L; j++) {
+            long c = 2021 * j;
+            if (c % r == l) {
+
+                System.out.println(j);
+                System.out.println(c);
+            }
+        }
+        System.out.println(36000000244L%r);
+    }
+
+    /**
+     * 空间
+     */
+    public void QA21_2(){
+        /**
+         * 32位长度为int类型
+         * 每个int长度为4个字节
+         *
+         * 1024 字节等于1kb
+         * 1024kb 等于 1MB
+         */
+    }
+
+    /**
+     * 《卡片》
+     */
+    public void QA21_1() {
+        int[] nums = new int[10];
+        Arrays.fill(nums,2021);
+        int count = 0;
+        a:for (int i = 1; true; i++) {
+            String s = i + "";
+            for (int k = 0; k < s.length(); k++) {
+                int i1 = Integer.parseInt(s.charAt(k) + "");
+                if (nums[i1] == 0) break a;
+                nums[i1]--;
+            }
+            count++;
+        }
+        System.out.println(count);
     }
 
     /**

@@ -4,14 +4,59 @@ import java.util.*;
 
 public class LC {
     public static void main(String[] args) {
-        System.out.println(new LC().networkBecomesIdle(new int[][]{
-                {3,8},{4,13},{0,7},{0,4},{1,8},{14,1},{7,2},{13,10},{9,11},{12,14},{0,6},{2,12},{11,5},{6,9},{10,3}
-        }, new int[]{
-            0,3,2,1,5,1,5,5,3,1,2,2,2,2,1
-        }));
-
+        System.out.println(new LC().trailingZeroes(30));
     }
 
+    public int trailingZeroes(int n) {
+        long c = n;
+        for (long i = n-1; i > 0; i--) {
+            c *=i;
+        }
+        String s = ""+c;
+        long count = 0,a = 0;
+        for (int i = s.length()-1; i >= 0; i--) {
+            if (a == 1) break;
+            if (s.charAt(i) == '0' && a == 0) {
+                count++;
+            }else a++;
+        }
+        return (int)count;
+    }
+
+    public String intToRoman(int num) {
+        String[] dirc = new String[1001];
+        dirc[1] = "I";dirc[4] = "IV";dirc[5] = "V";dirc[9] = "IX";
+        dirc[10] = "X";dirc[40] = "XL";dirc[50] = "L";dirc[90] = "XC";
+        dirc[100] = "C";dirc[400] = "CD";dirc[500] = "D";dirc[900] = "CM";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < num / 1000; i++) {
+            sb.append("M");
+        }
+        num %= 1000;
+        while (num != 0) {
+            for (int i = num; i >= 1; i--) {
+                if (dirc[i] == null) continue;
+                if (num % i == 0) {
+                    for (int j = 0; j < num/i; j++) sb.append(dirc[i]);
+                    num = 0;
+                    break;
+                }else {
+                    int l = num/i;
+                    for (int j = 0; j < l; j++) sb.append(dirc[i]);
+                    num %= i;
+                    break;
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * <网络最早空闲时间></>
+     * @param edges
+     * @param patience
+     * @return
+     */
     public int networkBecomesIdle(int[][] edges, int[] patience) {
         // 构造图
         List<int[]>[] grid = new LinkedList[patience.length];
