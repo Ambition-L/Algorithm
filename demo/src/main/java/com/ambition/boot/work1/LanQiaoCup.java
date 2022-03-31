@@ -1,6 +1,6 @@
 package com.ambition.boot.work1;
 
-import java.sql.Timestamp;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -8,7 +8,455 @@ import java.util.*;
 public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
     public static void main(String[] args) {
-        new LanQiaoCup().QA20_2();
+        LanQiaoCup lanQiaoCup = new LanQiaoCup();
+        lanQiaoCup.QA21_5();
+    }
+
+    /**
+     * 时间显示
+     */
+    public void QA21_5() {
+        Scanner scan = new Scanner(System.in);
+        long time = scan.nextLong();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String format = dateFormat.format(new Date(time));
+        System.out.println(format);
+        scan.close();
+    }
+
+    /**
+     * 字串分值
+     */
+    public void QA20_4(){
+        Scanner scan = new Scanner(System.in);
+        String str = scan.next();
+        long ans = 0;
+        for (int i = 0; i < str.length() - 1; i++) {
+            for (int j = i+1; j <= str.length(); j++) {
+                int[] count = new int[26];
+                for (char c:str.substring(i,j).toCharArray()) {
+                    count[c-'a']++;
+                }
+                for (int k = 0; k < count.length; k++) {
+                    if (count[k] == 1) ans++;
+                }
+            }
+        }
+        System.out.println(ans + 1);
+        scan.close();
+    }
+
+    /**
+     * k 倍区间
+     */
+    public void QA17_1() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int k = scan.nextInt();
+        long[] prefix = new long[n];
+        prefix[0] = scan.nextInt();
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i-1] + scan.nextInt();
+        }
+        Map<Long,Integer> maps = new HashMap<>();
+
+        int ans = 0;
+        maps.put(0L,1);
+        for (int i = 0; i < n; i++) {
+            ans += maps.getOrDefault(prefix[i] % k ,0);
+            maps.put(prefix[i] % k,maps.getOrDefault(prefix[i] % k ,0)+1);
+        }
+        System.out.println(ans);
+    }
+
+
+    public void QANONE() {
+        for (int i = 1; true; i++) {
+            int ans = 0;
+            for (int j = 1; j <= i; j++) {
+                if (i % j == 0) ans++;
+            }
+            if (ans == 100) {
+                System.out.println(i);
+                return;
+            }
+        }
+    }
+
+    /**
+     * 算式问题
+     * 173 + 286 = 459
+     * 295 + 173 = 468
+     * 173 + 295 = 468
+     * 183 + 492 = 675
+     */
+    public void QA12_3(){
+        int ans = 0;
+        for (int i = 123; i < 999; i++) {
+            for (int j = 123; j < 999; j++) {
+                int[] tong = new int[10];
+                char[] chars = (i + "").toCharArray();
+                if (!iss(tong,chars)) {
+                    continue;
+                }
+                char[] char2 = (j + "").toCharArray();
+                if (!iss(tong,char2)) {
+                    continue;
+                }
+                if (i + j > 999) continue;
+                char[] char3 = (i + j + "").toCharArray();
+                if (!iss(tong,char3)) {
+                    continue;
+                }
+                ans++;
+            }
+        }
+        System.out.println(ans);
+    }
+    public boolean iss(int[] t,char[] cs) {
+        for (int k = 0; k < cs.length; k++) {
+            int index = cs[k]-'0';
+            if (index == 0 || t[index] != 0) return false;
+            t[index]++;
+        }
+        return true;
+    }
+
+    /**
+     * 数列求值
+     */
+    public void QA19_1() {
+        int p1 = 1;
+        int p2 = 1;
+        int p3 = 3;
+        int ans = 0;
+        for (int i = 5; i <= 20190324; i++) {
+            ans = p1 + p2 + p3;
+            ans %= 10000;
+            p1 = p2;
+            p2 = p3;
+            p3 = ans;
+        }
+        System.out.println(p3);
+    }
+
+    /**
+     * 棋盘放麦子
+     */
+    public void QA12_2() {
+        BigInteger x1 = new BigInteger("1");
+        BigInteger x2 = new BigInteger("2");
+        BigInteger ans = new BigInteger("1");
+        for (int i = 2; i <= 64; i++) {
+            x1 = x1.multiply(x2);
+            ans = ans.add(x1);
+        }
+        System.out.println(ans);
+    }
+
+    /**
+     * 猜生日
+     */
+    public void QA12_1() {
+        for (int i = 1900;i<2013; i++) {
+            for (int k = 1; k <= getMonthDays(i, 6); k++) {
+                String ts = "" +  i + "06" + (k >= 10? k:"0"+k);
+                int th = Integer.parseInt(ts);
+                if (th % 2012 == 0 && th % 3 == 0 && th % 12 ==0){
+                    System.out.println(th);
+//                    return;
+                }
+            }
+
+        }
+    }
+
+    /**
+     *  星期一
+     */
+    public void QA18_3() {
+        long days = 0;
+        for (int i = 1901; i <= 2000 ; i++) {
+            for (int j = 0; j < 12; j++) {
+                days += getMonthDays(i,j);
+            }
+        }
+
+        Calendar cs = Calendar.getInstance();
+        cs.set(2000,11,31);
+        int week = cs.get(Calendar.DAY_OF_WEEK);
+        int ans = 0;
+
+        System.out.println((days - 6)%7);
+        System.out.println((days - 6)/7);
+    }
+
+    /**
+     * 获取某年某月有多少天
+     */
+    int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
+    public int getMonthDays(int year,int month){
+        if (month != 2) return months[month];
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            return months[month]+1;
+        }else {
+            return months[month];
+        }
+    }
+
+    /**
+     * 跑步锻炼
+     *  星期一 月初一跑2km，其余1km
+     *  从   2000 年 1 月 1 日周六（含）到
+     *      2020 年 10 月 1 日周四（含）
+     */
+    public void QA20_3() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000,0,1);
+        int ans = 0;
+        while (true){
+            if (calendar.get(Calendar.DAY_OF_WEEK) == 2 ||
+                calendar.get(Calendar.DATE) == 1) ans+=2;
+            else ans+=1;
+
+            if (calendar.get(Calendar.YEAR) == 2020 &&
+                calendar.get(Calendar.MONTH) == 9
+                    && calendar.get(Calendar.DATE) == 1)  break;
+
+            calendar.add(Calendar.DATE,1);
+        }
+        System.out.println(ans);
+    }
+
+    /**
+     * 分数
+     */
+    public void QA18_1() {
+        int[] fenmus = new int[20];
+        int[] fenzis = new int[20];
+        Arrays.fill(fenzis,1);
+        fenmus[0] = 1;
+        for (int i = 1,j = 1; i < 20; i++) {
+            fenmus[i] = j *=2;
+        }
+        long fenmu =  fenmus[19];
+        long fenzi = 0;
+        for (int i = 0; i < fenzis.length; i++) {
+            fenzi += fenmu / fenmus[i];
+        }
+        long gcb = gcb(fenzi,fenmu);
+        System.out.println((fenzi / gcb) + "/" + (fenmu/gcb));
+    }
+    public long gcb(long a,long b) {
+        for (long i = b ; i >= 1; i--) {
+            if (a % i == 0 && b % i == 0) return i;
+        }
+        return 0;
+    }
+
+    /**
+     * 凑算式
+     */
+    int answer = 0;
+    LinkedList<Integer> list = new LinkedList<>();
+    public void QA16_3() {
+        if (list.size() == 9){
+//            int a = list.get(0);
+//            int a1 = list.get(1);
+//            int a2 = list.get(2);
+//            int x = Integer.parseInt(list.get(3) + "" + list.get(4) + list.get(5));
+//            int y = Integer.parseInt(list.get(6) + "" + list.get(7) + list.get(8));
+//            if ((a1 * y + a2 * x) % (y * a2) == 0 &&
+//                    a + (a1 * y + a2 * x) / (y * a2) == 10) {
+//                answer++;
+//            }
+
+            int c1 = list.get(0) + list.get(1) + list.get(2) + list.get(3);
+            int c2 = list.get(3) + list.get(4) + list.get(5) + list.get(6);
+            int c3 = list.get(0) + list.get(6) + list.get(7) + list.get(8);
+            if (c1 == c2 && c1 == c3) {
+                answer++;
+            }
+            return;
+        }
+        for (int i = 1; i <= 9; i++) {
+            if (i == 0 || list.contains(i)) continue;
+            list.add(i);
+            QA16_3();
+            list.removeLast();
+        }
+    }
+
+    /**
+     * 生日蜡烛
+     */
+    public void QA16_2() {
+        a:for (int i = 1; true; i++) {
+            int count = 0;
+            for (int j = i; true; j++) {
+                count += j;
+                if (count == 236) {
+                    System.out.println(i);
+                    break a;
+                }else if (count > 236) break;
+            }
+        }
+    }
+
+    /**
+     * 煤球数目
+     */
+    public void QA16_1() {
+        int[] dp = new int[101];
+        dp[1] = 1;
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = i + dp[i-1];
+        }
+        System.out.println(dp[100]);
+    }
+
+    /**
+     * 《牌型种数》
+     */
+    int[] pk;
+    int ansans = 0;
+    public void QA15_4() {
+        pk = new int[52];
+        int p = 0;
+        for (int i = 1; i <= 13; i++) {
+            pk[p++]  = i;
+            pk[p++]  = i;
+            pk[p++]  = i;
+            pk[p++]  = i;
+        }
+        dfs(0,new LinkedList<>());
+    }
+    public void dfs(int start,LinkedList<Integer> ans) {
+        if (ans.size() == 13) {
+            ansans++;
+            return;
+        }
+        for (int i = start; i < pk.length; i++) {
+            if (i > start && pk[i]==pk[i-1]) continue;
+            ans.add(i);
+            dfs(i + 1,ans);
+            ans.removeLast();
+        }
+    }
+
+    /**
+     * <饮料换购></>
+     */
+    public void QA15_3() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int p = n;
+        while (p >= 3) {
+            int s = p % 3;
+            int t = p / 3;
+            n += t;
+            p = s + t;
+        }
+        System.out.println(n);
+        scan.close();
+    }
+
+    /**
+     * 《加法变乘法》
+     */
+    public void QA15_2() {
+        for (int i = 1; i < 49; i++) {
+            for (int j = i + 2; j <= 46; j++) {
+                int count = i * (i+1) + j * (j + 1);
+                for (int k = 1; k < 50; k++) {
+                    if (k != i && k != i +1 && k != j && k != j + 1) count+=k;
+                }
+                if (count==2015) System.out.println(i);
+            }
+        }
+    }
+
+    public void QA15_1() {
+        Map<Long,Long> maps = new HashMap<>();
+        for (long i = 1; i < 100000; i++) {
+            String[] ss = ((Long)(i * i * i) + "").split("");
+            long c = 0;
+            for (int j = 0; j < ss.length; j++) {
+                c += Long.parseLong(ss[j]);
+            }
+            if (c == i) maps.put(i,c);
+        }
+        System.out.println(maps.size());
+    }
+
+    public void QA14_1() {
+        String str = "abcdefghijklmnopqrs";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 106; i++) {
+            sb.append(str);
+        }
+        while (sb.length() > 1) {
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < sb.length(); i++) {
+                if (i % 2 == 0) list.add(i);
+            }
+            int i = 0;
+            for (Integer integer : list) {
+                sb.deleteCharAt(integer - i);
+                i++;
+            }
+        }
+        System.out.println(sb.toString());
+    }
+
+    public void QA13_3() {
+        int[][] dp = new int[4][5];
+        Arrays.fill(dp[0],1);
+        for (int i = 0; i < 4; i++) dp[i][0] = 1;
+        for (int i = 1; i < 4; i++) {
+            for (int j = 1; j < 5; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j-1];
+            }
+        }
+        System.out.println(dp[3][4]);
+    }
+
+    /**
+     * 假设 a b c d e 代表 1 ~ 9 不同的 5 个数字（注意是各不相同的数字，且不含 00 ）
+     * 能满足形如： ab * cde = adb * ce 这样的算式一共有多少种呢？
+     */
+    public void QA13_2() {
+        int ans = 0;
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 10 ; j++) {
+                if (j == i) continue;
+                for (int k = 1; k < 10; k++) {
+                    if (k == i || k == j) continue;
+                    for (int l = 1; l < 10 ; l++) {
+                        if ( l == k || l == j || l == i) continue;
+                        for (int m = 1; m < 10; m++) {
+                            if (m == i || m == j || m == k || m == l) continue;
+                            int left = Integer.parseInt(i + "" + j) * Integer.parseInt(k + "" + l + m);
+                            int right = Integer.parseInt(i + "" + l + j) * Integer.parseInt(k + "" + m);
+                            if (left == right) ans++;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+    public void QA13_1() {
+        Calendar instance = Calendar.getInstance();
+        for (int i = 2099; true; i+=100) {
+            instance.set(Calendar.YEAR,i);
+            instance.set(Calendar.MONTH,11);
+            instance.set(Calendar.DATE,31);
+            if (instance.get(Calendar.DAY_OF_WEEK) == 1) {
+                System.out.println(i);
+                break;
+            }
+        }
     }
 
     public void QA20_2(){
@@ -998,12 +1446,12 @@ public class LanQiaoCup {
      */
     public void getDatetime(long mills) {
         // 存储毫秒
-        Timestamp timestamp = new Timestamp(mills-28800000);
+//        Timestamp timestamp = new Timestamp(mills-28800000);
         // 初始化需要输出的字符串时间格式
         DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
         // 格式化 时间戳转时间字符串
-        String format = dateFormat.format(timestamp);
-        System.out.println(format);
+//        String format = dateFormat.format(timestamp);
+//        System.out.println(format);
     }
 
     /**

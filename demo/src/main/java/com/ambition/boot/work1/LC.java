@@ -4,7 +4,8 @@ import java.util.*;
 
 public class LC {
     public static void main(String[] args) {
-        System.out.println(new LC().trailingZeroes(30));
+//        System.out.println(new LC().trailingZeroes(30));
+        System.out.println(Integer.toBinaryString(8));
     }
 
     public int trailingZeroes(int n) {

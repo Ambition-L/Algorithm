@@ -4,37 +4,61 @@ import java.util.*;
 
 public class LanQiaoCupTalk {
 
+    int count = Integer.MAX_VALUE;
     public static void main(String[] args) {
-        String s =  "0100110001010001";;
+        LanQiaoCupTalk lanQiaoCupTalk = new LanQiaoCupTalk();
+        lanQiaoCupTalk.QA8();
+//        System.out.println(lanQiaoCupTalk.count);
+    }
 
-        int ans = 0;
-        Set<String> set  = new HashSet<>();
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = i+1; j <= s.length(); j++) {
-                set.add(s.substring(i,j));
+    /**
+     * 13届蓝桥杯模拟赛。 回溯
+     * @param num
+     * @param c
+     */
+    public void QA3 (int num,int c) {
+        if (num == 1)  {
+            count = Math.min(count,c);
+            return;
+        }
+        if (num % 2 == 0) {
+            c++;
+            QA3(num/2,c);
+            c--;
+        }else {
+            for (int i = 0; i < 2; i++) {
+                c++;
+                if (i == 1) {
+                    num++;
+                    QA3(num,c);
+                    num--;
+                }else {
+                    num--;
+                    QA3(num,c);
+                    num++;
+                }
+                c--;
             }
         }
-        System.out.println(set.size());
     }
 
 
-
     /**
-     *
+     *   13届蓝桥杯模拟赛 第八题《插座》
+     *      "模拟"
      */
+    int[][] yuan;
+    int[][] cs;
     public void QA8 () {
         Scanner scan = new Scanner(System.in);
         int r = scan.nextInt();
         int c = scan.nextInt();
-        int[][] yuan = new int[r][c];
-        String[] yuan1 = new String[r];
+        yuan = new int[r][c];
         for (int i = 0; i < r; i++) {
-            String next = scan.next();
-            String[] split = next.split("");
+            String[] split = scan.next().split("");
             for (int j = 0; j < c; j++) {
                 yuan[i][j] = Integer.parseInt(split[j]);
             }
-            yuan1[i] = next;
         }
         int nr = scan.nextInt();
         int nc = scan.nextInt();
@@ -42,77 +66,35 @@ public class LanQiaoCupTalk {
             System.out.println("NO");
             return;
         }
-        List<String> tStr = new ArrayList<>();
-        Set<String> set = new HashSet<>();
-        int t = -1,d = -1,l = -1,r1 = -1;
+        cs = new int[nr][nc];
         for (int i = 0; i < nr; i++) {
-            String next = scan.next();
-            tStr.add(next);
-            String[] split = next.split("");
+            String[] split = scan.next().split("");
             for (int j = 0; j < nc; j++) {
-                if (Integer.parseInt(split[j]) == 1) {
-                    if (t == -1) t = i;
-                    if (l == -1) l = j;
-                    d = i;
-                    r1 = Math.max(r1,j);
-                    set.add(i + "," + j);
+                cs[i][j] = Integer.parseInt(split[j]);
+            }
+        }
+
+        // 模拟插座的每行每列 （行列小于等于插头）
+        for (int i = 0; i + nr - 1 < r; i++) {
+            for (int j = 0; j + nc - 1 < c; j++) {
+                if (check(i,j)) {
+                    System.out.println((i+1) + " " + (j+1));
+                    return;
                 }
             }
         }
-        int top = t,down = nr - d - 1,left = l,right = nc - r1 - 1;
 
-        boolean[][] flag = new boolean[r][c];
-        for (int i = 0; i < r; i++) {
-            a:for (int j = 0; j < c; j++) {
-                if (yuan[i][j] == 0 || flag[i][j]) continue;
-                Set<int[]> tSet = new HashSet<>();
-                int[] ld = new int[]{Integer.MAX_VALUE,-1,-1};
-                QA8DFS(yuan,i,j,tSet,flag,ld);
-                if (tSet.size() < set.size()) continue;
-                // 校验是否越界
-                if (i - top < 0 || (c - ld[2] - 1) - right < 0 ||
-                    ld[0] - left < 0 || (r - ld[1] - 1) - down < 0 ) continue;
-
-                List<String> lll = new ArrayList<>();
-                for (int k = i; k <= ld[1]; k++) {
-                    lll.add(yuan1[k].substring(ld[0],ld[2]+1));
-                }
-
-                int ab = 0;
-                int x = -1;
-                for (int k = 0; k < lll.size(); k++) {
-                    for (int m = 0; m < tStr.size(); m++) {
-                        int c1 =k;
-                        if (lll.get(c1).contains(tStr.get(m))) {
-                            if (x == -1) x = k;
-                            ab++;
-                        }
-                        c1++;
-                    }
-
-                }
-                if (ab < tStr.size()) continue a;
-
-                System.out.println(2 + " " + 4);
-                return;
-            }
-        }
         System.out.println("NO");
         scan.close();
     }
-    public void QA8DFS(int[][] nums, int x, int y, Set<int[]> set,boolean[][] flag,
-                       int[] ld) {
-        if (x < 0 || x >= nums.length || y < 0 || y >= nums[x].length
-            || nums[x][y] == 0 || flag[x][y]) return;
-        ld[0] = Math.min(ld[0],y);
-        ld[1] = Math.max(ld[1],x);
-        ld[2] = Math.max(ld[2],y);
-        set.add(new int[]{x,y});
-        flag[x][y] = true;
-        QA8DFS(nums,x - 1,y,set,flag,ld);
-        QA8DFS(nums,x + 1,y,set,flag,ld);
-        QA8DFS(nums,x,y - 1,set,flag,ld);
-        QA8DFS(nums,x ,y + 1,set,flag,ld);
+    public boolean check(int x,int y) {
+        // 模拟插头 处理对应的1是否有1
+        for (int i = 0; i < cs.length; i++) {
+            for (int j = 0; j < cs[0].length; j++) {
+                if (cs[i][j] == 1 && yuan[i+x][j+y] == 0) return false;
+            }
+        }
+        return true;
     }
 
     public void QA9 () {
@@ -148,44 +130,34 @@ public class LanQiaoCupTalk {
         scan.close();
     }
 
+    /**
+     * 循环填数
+     */
     public void QA4 () {
         int[][] nums = new int[30][30];
         int end = 30;
         int num = 1;
         int start = 0;
-        for (int i = 0,j = 0; i < nums.length && j < nums.length; i++) {
+        a:while (true){
             for (int k = start; k < end - 1; k++) {
-                nums[start][k] = num;
-                num++;
+                if (nums[19][19] != 0) break a;
+                nums[start][k] = num++;
             }
             for (int k = start; k < end - 1; k++) {
-                nums[k][end - 1] = num;
-                num++;
+                nums[k][end - 1] = num++;
             }
 
             for (int k = end - 1; k >= start + 1; k--) {
-                nums[end - 1][k] = num;
-                num++;
+                nums[end - 1][k] = num++;
             }
 
             for (int k = end - 1; k >= start +1; k--) {
-                nums[k][start] = num;
-                num++;
+                nums[k][start] = num++;
             }
             start++;
             end--;
         }
-    }
-
-    public void QA3 () {
-        int num = 2021;
-        int count = 0;
-        while (num != 1) {
-            if (num % 2 == 0) num /= 2;
-            else num -= 1;
-            count++;
-        }
-        System.out.println(count);
+        System.out.println(nums[19][19]);
     }
 
     public void QA2() {
