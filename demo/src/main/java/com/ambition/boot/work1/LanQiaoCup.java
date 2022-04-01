@@ -9,7 +9,92 @@ public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA21_5();
+        lanQiaoCup.QA11_1();
+    }
+
+    /**
+     * 金额差错
+     * 6
+     * 5
+     * 3
+     * 2
+     * 4
+     * 3
+     * 1
+     */
+    int count = 0;
+    public void QA11_1() {
+        Scanner scanner = new Scanner(System.in);
+        int money = scanner.nextInt();
+        int n = scanner.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = scanner.nextInt();
+        Arrays.sort(nums);
+        dfs1(nums,money,0,0);
+        System.out.println(count);
+    }
+    public void dfs1(int[] nums,int money,int total,int index) {
+        if (total >= money) {
+            if (money == total)
+                count++;
+            return;
+        }
+        for (int i = index; i < nums.length; i++) {
+            if(i>index&&nums[i]==nums[i-1]) continue;
+            total += nums[i];
+            dfs1(nums,money,total,i+1);
+            total -= nums[i];
+        }
+    }
+
+    /**
+     * 时间加法
+     */
+    public void QA21_6() {
+        Scanner scanner = new Scanner(System.in);
+        long date = scanner.nextInt();
+        long time = scanner.nextInt();
+        long min = scanner.nextInt();
+        long addD =  min/60;
+        long addt =  min % 60;
+        if (time + addt >= 60) {
+            time = (time + addt) % 60;
+            date++;
+            date = (date + addD) % 24;
+        }else {
+            time = (time + addt) % 60;
+            date = (date + addD) % 24;
+        }
+        System.out.println(date);
+        System.out.println(time);
+    }
+
+    /**
+     * 分巧克力
+     */
+    public void QA17_2() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int k = scan.nextInt();
+        int[][] nums = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+            nums[i][0]= scan.nextInt();
+            nums[i][1]= scan.nextInt();
+        }
+
+        int left = 1,right = 100000;
+        while (left < right) {
+            int mid = left + (right - left + 1) / 2;
+            int count = 0;
+            for (int i = 0; i < n; i++) {
+                count+=(nums[i][0]/mid) * (nums[i][1]/mid);
+            }
+            if (count <= k) {
+                right = mid - 1;
+            }else left = mid;
+        }
+        System.out.println(left);
     }
 
     /**
