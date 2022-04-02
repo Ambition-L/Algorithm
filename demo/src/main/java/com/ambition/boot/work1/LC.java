@@ -23,21 +23,17 @@ public class LC {
         List<Integer> list = new ArrayList<>(maps.keySet());
         if (list.size() % 2 != 0 || count % 2 != 0) return false;
         Collections.sort(list);
-        Set<Integer> set = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             int num = list.get(i);
-            if(!set.add(num)) continue;
             Integer c1 = maps.get(num);
             if (num < 0) {
                 Integer c2 = maps.get(num / 2);
                 if (num % 2 != 0 || c2 == null || c1 != c2) return false;
                 maps.remove(num / 2);
-                set.add(num / 2);
             }else {
                 Integer c2 = maps.get(num * 2);
                 if (c2 == null || c1 != c2) return false;
                 maps.remove(num * 2);
-                set.add(num * 2);
             }
             maps.remove(num);
         }

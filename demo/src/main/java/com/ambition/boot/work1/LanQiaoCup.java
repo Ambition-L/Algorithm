@@ -9,7 +9,167 @@ public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA11_1();
+        lanQiaoCup.QA18_G1();
+    }
+
+    /**
+     * 含 2 天数
+     */
+    public void QA18_G2() {
+
+    }
+
+    /**
+     * 最大乘积
+     */
+    public void QA18_G1() {
+        Set<String> set = new HashSet<>();
+        dfs_18_G1(set,new StringBuilder());
+        long max = 0;
+        for (String curr : set) {
+            for (int i = 0; i < curr.length(); i++) {
+                a:for (int j = i+1; j < curr.length(); j++) {
+                    long a = Long.parseLong(curr.substring(i,j));
+                    long b = Long.parseLong(curr.substring(j));
+                    String str = a * b + "";
+                    if (str.contains("0") || str.length() > 9) continue ;
+                    for (int k = 1; k <= 9; k++) {
+                        if (!str.contains(k+"")) continue a;
+                    }
+                    max = Math.max(max,a * b);
+                }
+            }
+        }
+        System.out.println(max);
+    }
+    public void dfs_18_G1(Set<String> set,StringBuilder sb) {
+        if (sb.length() == 9) {
+            set.add(sb.toString());
+            return;
+        }
+        for (int i = 1; i <= 9 ; i++) {
+            if (sb.toString().contains(i+"")) continue;
+            sb.append(i);
+            dfs_18_G1(set,sb);
+            sb.deleteCharAt(sb.length()-1);
+        }
+    }
+
+    /**
+     * 数的幂次
+     */
+    public void QA_n1(){
+        Scanner scan = new Scanner(System.in);
+        int c = scan.nextInt();
+        while (c --> 0) {
+
+        }
+        for (int i = 0; i < c; i++) {
+            long n = scan.nextInt();
+            int m = scan.nextInt();
+            int p = scan.nextInt();
+            long ans = 1;
+            while(m>0) {
+                //这样判断k的二进制最后一位是否是1
+                if((m&1)==1) ans=ans*n%p;
+                m>>=1;
+                n=n*n%p;
+            }
+            System.out.println(ans%p);
+        }
+        scan.close();
+    }
+
+    /**
+     * 全球变暖
+     *
+     */
+    boolean f = false;
+    public void QA18_4() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        String[][] nums = new String[n][n];
+        for (int i = 0; i < n; i++) {
+            String next = scan.next();
+            for (int j = 0; j < n; j++) {
+                String s = next.charAt(j) + "";
+                nums[i][j] = s;
+            }
+        }
+        int ans = 0;
+        boolean[][] flag = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (flag[i][j] || nums[i][j].equals(".")) continue;
+                dfs_18(nums,flag,i,j);
+                if (!f)ans++;
+                f = false;
+            }
+        }
+        System.out.println(ans);
+        scan.close();
+    }
+
+    public void dfs_18(String[][] nums,boolean[][] flag,int x,int y) {
+        if (x-1 >= 0 && x+1 < nums.length && y - 1>=0 && y+1 < nums.length
+                && nums[x-1][y].equals("#") && nums[x+1][y].equals("#")
+            && nums[x][y-1].equals("#") && nums[x][y+1].equals("#")) {
+            f = true;
+            return;
+        }
+        if (flag[x][y] || nums[x][y].equals(".")) {
+            return;
+        }
+        flag[x][y] = true;
+        dfs_18(nums,flag,x-1,y);
+        dfs_18(nums,flag,x+1,y);
+        dfs_18(nums,flag,x,y-1);
+        dfs_18(nums,flag,x,y+1);
+    }
+
+
+    /**
+     * 买不到的数目
+     *  对于互质的两个数 他们不能组成的最大数为
+     *      a * b - a - b
+     */
+    public void QA_A() {
+        Scanner scan = new Scanner(System.in);
+        int a = scan.nextInt();
+        int b = scan.nextInt();
+        System.out.println(a * b - a -b);
+    }
+
+    /**
+     * 等差数列
+     */
+    public void QA19_2() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = scan.nextInt();
+        Arrays.sort(nums);
+        int c = Integer.MAX_VALUE;
+        for (int i = 1; i < n; i++) {
+            c = Math.min(nums[i] - nums[i-1],c);
+        }
+        if (c == 0) {
+            System.out.println(n);
+            return;
+        }
+
+        int ans = 0;
+        for (int i = nums[0]; i <= nums[n-1]; i+=c) {
+            ans++;
+        }
+        System.out.println(ans);
+    }
+
+    /**
+     * 四平方和
+     */
+    public void de(){
+
     }
 
     /**
