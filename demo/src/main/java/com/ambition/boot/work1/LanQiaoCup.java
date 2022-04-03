@@ -7,16 +7,89 @@ import java.util.*;
 
 public class LanQiaoCup {
     static HashSet<String> set = new HashSet<>();
+    int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA18_G1();
+        lanQiaoCup.QA13_4();
+    }
+
+    /**
+     * 跳跃的小明
+     */
+    public void QATG_2() {
+        Scanner sc=new Scanner(System.in);
+        int n = sc.nextInt();
+        int p = sc.nextInt();
+        int t = sc.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();
+        if (t < 2 ) {
+            System.out.println(0);
+            return;
+        }
+
+    }
+
+    /**
+     * 打包
+     */
+    public void QATG_1() {
+        Scanner sc=new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] nums = new int[1001];
+        long total = 0;
+        for (int i = 0; i < n ; i++) {
+            int curr = sc.nextInt();
+            nums[curr]++;
+            total += curr;
+        }
+
+//        int left =
+
+        sc.close();
+    }
+
+    /**
+     * 积木大赛
+     */
+    public void QA13_4() {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int ans=0,last=0;
+        for(int i=0;i<n;++i) {
+            int a=sc.nextInt();
+            if(a>last) ans+=(a-last);
+            last=a;
+        }
+        System.out.println(ans);
     }
 
     /**
      * 含 2 天数
      */
     public void QA18_G2() {
-
+        int ans = 0;
+        for (int i = 1900; i <= 9999; i++) {
+            String y = i + "";
+            if (y.contains("2")) {
+                if (isR(i)) ans += 366;
+                else ans+= 365;
+                continue;
+            }
+            for (int j = 1; j <= 12 ; j++) {
+                if (j == 2) {
+                    if (isR(i)) ans += 29;
+                    else ans+=28;
+                }else if (j == 12) ans += 31;
+                else ans += 12;
+            }
+        }
+        System.out.println(ans);
+    }
+    public boolean isR(int year) {
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+        return false;
     }
 
     /**
@@ -439,7 +512,7 @@ public class LanQiaoCup {
     /**
      * 获取某年某月有多少天
      */
-    int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
+
     public int getMonthDays(int year,int month){
         if (month != 2) return months[month];
         if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
