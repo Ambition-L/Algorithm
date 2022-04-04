@@ -10,7 +10,263 @@ public class LanQiaoCup {
     int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA13_4();
+        lanQiaoCup.QA_8();
+    }
+
+    /**
+     * 小明的游戏1
+     */
+    public void QA_8() {
+        Scanner scan = new Scanner(System.in);
+        int t = scan.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = scan.nextInt();
+            for (int j = 0; j < n; j++) {
+                int curr = scan.nextInt();
+            }
+            if (n % 2 == 0) {
+                System.out.println("YES");
+            }else System.out.println("NO");
+        }
+        scan.close();
+    }
+
+    /**
+     * 蓝桥骑士
+     */
+    public void QA_7() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = scan.nextInt();
+        }
+        List<Integer> list = new ArrayList<>();
+        list.add(nums[0]);
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > list.get(list.size() - 1)) list.add(nums[i]);
+            else {
+                if (list.contains(nums[i])) continue;
+                int left = 0,right = list.size();
+                while (left < right) {
+                    int mid = left + (right - left) / 2;
+                    if (list.get(mid) > nums[i]) {
+                        right = mid;
+                    }else left = mid + 1;
+                }
+                list.set(left,nums[i]);
+            }
+        }
+        System.out.println(list.size());
+        System.out.println(list);
+    }
+
+    /**
+     * 百亿富翁
+     */
+    public void QA_6() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int[] nums = new int[n+1];
+        for (int i = 1; i <= n; i++) {
+            nums[i] = scan.nextInt();
+        }
+        Stack<Integer> stack = new Stack<>();
+        int[] leftNums = new int[n+1];
+        int[] rightNums = new int[n+1];
+        for (int i = 1; i <= n; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) stack.pop();
+            leftNums[i] = stack.isEmpty()? -1:stack.peek();
+            stack.push(i);
+        }
+        stack.clear();
+        for (int i = n; i > 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) stack.pop();
+            rightNums[i] = stack.isEmpty()? -1:stack.peek();
+            stack.push(i);
+        }
+        System.out.println(Arrays.toString(leftNums).replace("0","").replace(",","")
+            .replace("[","").replace("]","").trim());
+        System.out.println(Arrays.toString(rightNums).replace("0","").replace(",","")
+                .replace("[","").replace("]","").trim());
+//        for (int i = 1; i <= n; i++) {
+//            System.out.print(leftNums[i]  + " ");
+//        }
+//        System.out.println();
+//        for (int i = 1; i <= n; i++) {
+//            System.out.print(rightNums[i] + " ");
+//        }
+        scan.close();
+    }
+
+    /**
+     * 走迷宫
+     */
+    int x2,y2;
+    int len = Integer.MAX_VALUE;
+    boolean qa5Flag = false;
+    public void QA_5() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int[][] grid = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                grid[i][j] = scan.nextInt();
+            }
+        }
+
+        int x1 = scan.nextInt();
+        int y1 = scan.nextInt();
+        x2 = scan.nextInt() - 1;
+        y2 = scan.nextInt() - 1;
+
+        boolean[][] flag = new boolean[n][m];
+        dfsQA_5(grid,x1 - 1,y1 - 1,0,flag);
+
+        System.out.println(!qa5Flag? -1:len);
+        scan.close();
+    }
+
+    public void dfsQA_5(int[][] grid,int x,int y,int path,boolean[][] flag) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[x].length
+                    || flag[x][y] || grid[x][y] == 0 || (x == x2 && y ==y2)) {
+            if (x == x2 && y == y2) {
+                qa5Flag = true;
+                len = Math.min(len,path);
+            }
+            return;
+        }
+        flag[x][y] = true;
+        path++;
+        dfsQA_5(grid,x - 1,y,path,flag);
+        dfsQA_5(grid,x + 1,y,path,flag);
+        dfsQA_5(grid,x,y - 1,path,flag);
+        dfsQA_5(grid,x,y + 1,path,flag);
+        path--;
+        flag[x][y] = false;
+    }
+
+    /**
+     * 解立方根 (二分 不要怀疑解题的方式)
+     */
+    public void QA_4 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        double[] ans1 = new double[n];
+        for (int i = 0; i < n; i++) {
+            double curr = scan.nextDouble();
+            if (curr == 0 || curr == 1) {
+                ans1[i] = curr;
+                continue;
+            }
+            double right = Math.sqrt(curr);
+            double left = Math.sqrt(right);
+            double ans = -1;
+            while (left < right) {
+                double mid = left + ( right - left ) / 2;
+                if ((mid * mid * mid) == curr) {
+                    ans = mid;
+                    break;
+                }else if ((mid * mid * mid) > curr) {
+                    right = mid - 0.0001;
+                }else {
+                    left = mid + 0.0001;
+                    ans = left;
+                }
+            }
+            ans1[i] = ans;
+        }
+        for (int i = 0; i < n; i++) System.out.printf("%.3f%n",ans1[i]);
+        scan.close();
+    }
+
+
+    /**
+     * 蓝桥侦探
+     */
+    public void QA_3() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int[] nums = new int[n*2+1];
+        for (int i = 1; i <= n * 2; i++) {
+            nums[i] = scan.nextInt();
+        }
+
+        int res = 0 , pos = 0;
+        for (int i = 1; i < nums.length; i++) {
+            int x,y;
+        }
+    }
+
+    class UF {
+        int[] nums;
+        public UF(int n) {
+            nums = new int[n];
+        }
+
+        public int find(int x) {
+            while (nums[x] != x) {
+                x = nums[x];
+            }
+            return x;
+        }
+        public void union(int x,int y) {
+            int rx = find(x);
+            int ry = find(y);
+            if (rx != ry) nums[x] = y;
+        }
+    }
+
+    /**
+     * 绝世武功
+     *
+     */
+    public void QA_2() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int c = scan.nextInt();
+        long ans = 0;
+        for (int i = 0; i < c; i++) {
+            long l = scan.nextInt();
+            long r = scan.nextInt();
+            long s = scan.nextInt();
+            long e = scan.nextInt();
+            ans += (s + e) * (r - l + 1) / 2;
+        }
+        System.out.println(ans);
+        scan.close();
+    }
+
+    /**
+     * 小明的彩灯
+     */
+    public void QA_1() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int q = scan.nextInt();
+        // 原数组
+        long[] nums = new long[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = scan.nextInt();
+        }
+        // 记录操作数组
+        long[] ans = new long[n];
+        for (int i = 0; i < q; i++) {
+            int l = scan.nextInt();
+            int r = scan.nextInt();
+            long x = scan.nextInt();
+            ans[l-1] += x;
+            if (r != nums.length)ans[r] -= x;
+        }
+        // 操作数组前缀和
+        System.out.print(Math.max(ans[0] + nums[0],0) + " ");
+        for (int i = 1; i < n; i++) {
+            ans[i] = ans[i] + ans[i-1];
+            System.out.print(Math.max(ans[i] + nums[i],0) + " ");
+        }
+        scan.close();
     }
 
     /**
