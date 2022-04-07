@@ -10,8 +10,148 @@ public class LanQiaoCup {
     int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA_8();
+        lanQiaoCup.QA21_m4();
+        StringBuilder sb = new StringBuilder();
     }
+
+    /**
+     * 灌溉
+     *      21 模拟
+     *      多源bfs
+     */
+    long qa21M4Ans = 0;
+    public void QA21_m4() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int t = scan.nextInt();
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < t; i++) {
+            queue.offer(new int[]{scan.nextInt(), scan.nextInt()});
+        }
+        int k = scan.nextInt();
+        bfs21_m4(queue,n,m,k);
+        System.out.println(qa21M4Ans);
+        scan.close();
+    }
+
+    public void bfs21_m4(Queue<int[]> queue,int n,int m,int k) {
+        int[] dirs = new int[]{0,1,0,-1,0};
+        Set<String> set = new HashSet<>();
+        List<int[]> list = new ArrayList<>();
+        for (int i = 0; i <= k; i++) {
+            while (!queue.isEmpty()) {
+                int[] curr = queue.poll();
+                if (!set.add(curr[0] + "," + curr[1])) continue;
+                for (int j = 0; j < 4; j++) {
+                    int x = curr[0]+dirs[j];
+                    int y = curr[1]+dirs[j+1];
+                    if (x <= 0 || x > n || y <= 0 || y > m) continue;
+                    list.add(new int[]{x,y});
+                }
+                qa21M4Ans++;
+            }
+            queue.addAll(list);
+            list.clear();
+        }
+    }
+
+    /**
+     * 删除字符
+     *  21模拟
+     */
+    public void QA21_m3() {
+        Scanner scan = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder(scan.next());
+        int t = scan.nextInt();
+
+        for (int i = 1; i <= t; i++) {
+            if (sb.charAt(0) > sb.charAt(1)) {
+                sb.deleteCharAt(0);
+            }else sb.deleteCharAt(1);
+        }
+        System.out.println(sb);
+        scan.close();
+    }
+
+
+    long ans21 = 0;
+    public void QA21_m2 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int[][] grid = new int[n][n];
+        dfsBack21_m2(grid,0);
+        System.out.println(ans21);
+    }
+
+    public void dfsBack21_m2(int[][] gird,int x) {
+        if (x >= gird.length) {
+            ans21++;
+            return;
+        }
+        for (int i = 0; i < gird.length; i++) {
+            if (check21_m2(gird,x,i)) {
+                gird[x][i] = 1;
+                dfsBack21_m2(gird,x+1);
+                gird[x][i] = 0;
+            }
+        }
+    }
+
+    public boolean check21_m2(int[][] grid, int x, int y) {
+        // 检查行列
+        for (int i = 0; i < grid.length; i++)
+            if (grid[i][y] == 1) return false;
+        for (int i = 0; i < grid.length; i++)
+            if (grid[x][i] == 1) return false;
+        // 检查斜角
+        for (int i = x - 3,j = y - 3; i <= x+3 && j <= y+3 ; j++,i++) {
+            if (i < 0 || j < 0 || i >= grid.length || j>=grid.length) continue;
+            if (grid[i][j] == 1) return false;
+        }
+
+        for (int i = x + 3,j = y - 3; i >= x-3 &&  j <= y+3; j++,i--) {
+            if (i < 0 || j < 0 || i >= grid.length || j>=grid.length) continue;
+            if (grid[i][j] == 1) return false;
+        }
+        return true;
+    }
+
+    /**
+     *  跳跃
+     *      21模拟
+     */
+    int maxLength = Integer.MIN_VALUE;
+    public void QA21_m1 () {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int[][] grid = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                grid[i][j] = scan.nextInt();
+            }
+        }
+        int[] dx = new int[]{0,0,0,1,2,3,1,1,2};
+        int[] dy = new int[]{1,2,3,0,0,0,1,2,1};
+        dfs21_m1(grid,dx,dy,0,0,grid[0][0]);
+        System.out.println(maxLength);
+        scan.close();
+    }
+
+    public void dfs21_m1(int[][] grid, int[] dx, int[] dy,int x, int y,int totalMax) {
+        if (x == grid.length - 1 && y == grid[x].length - 1) {
+            maxLength = Integer.max(totalMax,maxLength);
+        }
+
+        for (int i = 0; i < dx.length; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx < 0 || nx >= grid.length || ny < 0 || ny >= grid[x].length) continue;
+            dfs21_m1(grid,dx,dy,nx,ny, totalMax + grid[nx][ny]);
+        }
+    }
+
 
     /**
      * 小明的游戏1

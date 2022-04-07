@@ -4,10 +4,65 @@ import java.util.*;
 
 public class LC {
     public static void main(String[] args) {
-        System.out.println(new LC().canReorderDoubled(new int[]{
-                1,2,1,-8,8,-4,4,-4,2,-2
-        }));
+        new LC().solveNQueens(4);
+    }
 
+
+    List<List<String>> ans = new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+        LinkedList<StringBuilder> list = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) sb.append(".");
+        for (int i = 0; i < n; i++) list.add(new StringBuilder(sb));
+        comeBacking(list,0);
+        return ans;
+    }
+
+    public void comeBacking (LinkedList<StringBuilder> list,int row) {
+        if (row >= list.size()) {
+            List<String> ll = new ArrayList<>();
+            for (StringBuilder s : list) ll.add(s.toString());
+            ans.add(ll);
+            return;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (check(list,row,i)) {
+
+                list.set(row,list.get(row).replace(i,i+1,"Q"));
+                comeBacking(list,row+1);
+                list.set(row,list.get(row).replace(i,i+1,"."));
+            }
+        }
+    }
+
+    public boolean check(LinkedList<StringBuilder> list,int row,int col) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(row).charAt(i) == 'Q') return false;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).charAt(col) == 'Q') return false;
+        }
+        for (int i = 0,j = 0; i < list.size() && j < list.size(); j++,i++) {
+            if (list.get(i).charAt(j) == 'Q') return false;
+        }
+        for (int i = list.size()-1,j = 0;
+             i >= 0 && j < list.size(); j++,i--) {
+            if (list.get(i).charAt(j) == 'Q') return false;
+        }
+        return true;
+    }
+
+    public int countPrimeSetBits(int left, int right) {
+        int ans = 0;
+        a:for (int i = left; i <= right; i++) {
+            int num = Integer.bitCount(i);
+            if (num < 2 ) continue;
+            for (int j = 2; j * j <= num; j++) {
+                if (num % j == 0) continue a;
+            }
+            ans++;
+        }
+        return ans;
     }
 
     public boolean canReorderDoubled(int[] arr) {
