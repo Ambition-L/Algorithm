@@ -10,8 +10,113 @@ public class LanQiaoCup {
     int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA21_m4();
-        StringBuilder sb = new StringBuilder();
+        lanQiaoCup.QA21_m6();
+    }
+
+    public void QA21_m6() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        String str = n +"";
+        if (str.length() %  2 == 0) {
+            int c = (10 - str.length()) / 2;
+            String temp = "";
+            for (int i = 0; i < c; i++) {
+                temp += "=";
+            }
+            System.out.println(temp + str + temp);
+        }else {
+            int c = (10 - str.length()) / 2;
+            String temp = "";
+            for (int i = 0; i < c; i++) {
+                temp += "=";
+            }
+            System.out.println("=" + temp + str + temp);
+        }
+    }
+
+    /**\
+     * 回路计数
+     *      --21
+     */
+    public void QA21_7() {
+        List<Integer>[] graph = new LinkedList[22];
+        for (int i = 0; i < graph.length; i++) graph[i] = new LinkedList<>();
+        for (int i = 1; i <= 21; i++) {
+            for (int j = 1; j <=21 ; j++) {
+                if (gcb(i,j) == 1) {
+                    if (!graph[i].contains(j)) graph[i].add(j);
+                    if (!graph[j].contains(i)) graph[j].add(i);
+                }
+            }
+        }
+        LinkedList<Integer> objects = new LinkedList<>();
+        objects.add(1);
+        QA21_7CB(graph,objects,1);
+    }
+    long aaa = 0;
+    public void QA21_7CB(List<Integer>[] graph,LinkedList<Integer> ans,int node) {
+        if (ans.size() == 21) {
+            if (node == 1) aaa++;
+            return;
+        }
+        List<Integer> list = graph[node];
+        for (int i = 0; i < list.size(); i++) {
+            if (ans.contains(list.get(i))) continue;
+            ans.add(list.get(i));
+            QA21_7CB(graph,ans,list.get(i));
+            ans.removeLast();
+        }
+    }
+
+    public static int gcd(int i,int num){
+        int t = 0;
+        while(num!=0){
+            t = num;
+            num = i%num;
+            i = t;
+        }
+        return i;
+    }
+
+    /**
+     * 扫雷
+     *  -- 21模拟
+     */
+    public void QA21_m5() {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int[][] nums = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                nums[i][j] = scan.nextInt();
+            }
+        }
+
+        int[] dx = new int[]{0,0,1,1,-1,-1,-1,1};
+        int[] dy = new int[]{1,-1,0,1,0,1,-1,-1};
+        int[][] an = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int ans = nums[i][j];
+                if (ans == 1) {
+                    an[i][j] = 9;
+                    continue;
+                }
+                for (int k = 0; k < 8; k++) {
+                    int x = i + dx[k];
+                    int y = j + dy[k];
+                    if (x >=0 && x < n && y >=0 && y < m) ans += nums[x][y];
+                }
+                an[i][j] = ans;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                System.out.print(an[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     /**
