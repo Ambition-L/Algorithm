@@ -10,7 +10,28 @@ public class LanQiaoCup {
     int[] months = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
     public static void main(String[] args) {
         LanQiaoCup lanQiaoCup = new LanQiaoCup();
-        lanQiaoCup.QA21_m6();
+        lanQiaoCup.QA20_5();
+    }
+
+    /**
+     * 斐波那契最大公约数
+     */
+    public void QA20_5() {
+        BigInteger[] dp = new BigInteger[2020];
+        dp[0] = new BigInteger("1");
+        dp[1] = new BigInteger("1");
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = dp[i-1].add(dp[i-2]);
+        }
+        System.out.println(dp[519]);
+        System.out.println(dp[2019]);
+
+        System.out.println(gcb(dp[519],dp[2019]));
+    }
+
+
+    public BigInteger gcb(BigInteger a,BigInteger b) {
+        return b.toString().equals("0")? a:gcb(b,a.mod(b));
     }
 
     public void QA21_m6() {
