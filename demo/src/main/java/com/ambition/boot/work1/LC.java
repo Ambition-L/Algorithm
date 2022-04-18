@@ -4,7 +4,51 @@ import java.util.*;
 
 public class LC {
     public static void main(String[] args) {
-        new LC().rotateString("abcde","cdeab");
+    }
+    public String mostCommonWord(String paragraph, String[] banned) {
+
+        List<String> bList = new ArrayList<>();
+        for (String curr:banned)bList.add(curr.toLowerCase());
+        String[] strs = paragraph.toLowerCase()
+                .replaceAll(","," ")
+                .replaceAll("\\."," ")
+                .replaceAll("!"," ")
+                .replaceAll("\\?"," ")
+                .replaceAll(";"," ")
+                .replaceAll("'"," ")
+                .split(" ");
+        Map<String,Integer> maps = new HashMap<>();
+        int c = 0;
+        String ans = "";
+        for (String curr : strs) {
+            if (!curr.equals("") && !bList.contains(curr)) {
+                maps.put(curr,maps.getOrDefault(curr,0)+1);
+                if (maps.get(curr) > c) {
+                    c = maps.get(curr);
+                    ans = curr;
+                }
+            }
+        }
+        return ans.toLowerCase();
+    }
+
+    public int largestPalindrome(int n) {
+        if (n == 1) return 9;
+        long num = (long) Math.pow(10,n)-1;
+        long cur = 1;
+        a:for (long i = num; i > 0; i--) {
+            cur = i;
+            for (long x = cur; x > 0; x /= 10) {
+                cur = cur * 10 + x % 10; // 翻转左半部分到其自身末尾，构造回文数 p
+            }
+            for (long j = num; j * j >= cur; j--) {
+                if (cur % j == 0)  {
+                    cur %= 1337;
+                    break a;
+                }
+            }
+        }
+        return (int)cur;
     }
 
     public boolean rotateString(String s, String goal) {
